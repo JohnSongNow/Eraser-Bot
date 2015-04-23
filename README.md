@@ -15,7 +15,6 @@ Eraser bot features anti, spam filters, customiable dilagoue and LeagueAPI inter
 - Anti Spam Filter
 - Easy to customize mod, viewer, and owner bot phrases
 - LOL account intergration
-- 
 
 # Bot Info
 Below is a list of all the required info for the bot to function. Keep in mind that if you do not understand a field simply conduct a google serach.
