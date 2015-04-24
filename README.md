@@ -28,7 +28,8 @@ Below is a list of all the required info for the bot to function. Keep in mind t
 - PASSWORD = "twitchBotOuathID"
   - Gotten via http://twitchapps.com/tmi/
 - RIOT_API_KEY = 'riotAPIKey'
-  - Gotten via https://developer.riotgames.com/ 
+  - Gotten via https://developer.riotgames.com/
+- SUMMONER_NAME = 'summonerName'(Optional)
 
 # System Commands
 System commands are commands that effect change the system of the bot whether it's the spam filter or other settings. All system commands can only be used by mods with some restricted to only the owner.
