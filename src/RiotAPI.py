@@ -32,7 +32,6 @@ class RiotAPI():
                 region = self.region,
                 url = api_url
                 )
-        print(line)
         # Getting the response from the server
         # based on our URL, REGION and BASE
         response = requests.get(line, params=args)
@@ -42,6 +41,7 @@ class RiotAPI():
             return response.json()
         except Exception:
             return None
+
 
     def _request_global(self, api_url, params=dict()):
             '''
@@ -70,6 +70,7 @@ class RiotAPI():
                 return response.json()
             except Exception:
                 return None
+
 
     def get_summoner_by_name(self, name):
         '''
@@ -113,13 +114,18 @@ class RiotAPI():
             )
         return self._request(api_url, params)
 
+
     def get_current_runes(self, ID):
         '''
+        (RiotAPI, Str) -> Str
+        Returns a JSON respresentation of this summoner's
+        current runepage.
         '''
         runepages = self.get_runepages(ID)
         for runepage in runepages[str(ID)]['pages']:
             if(runepage['current'] == True):
-                print(runepage)
+                return runepage
+        return None
 
 
     def get_static_data_runes(self, region="north_america", params={}):
@@ -133,7 +139,6 @@ class RiotAPI():
             version = Consts.API_VERSIONS['static_data'],
             region = Consts.REGIONS[region]
             )
-        print(api_url)
         return self._request_global(api_url, params)
 
 
@@ -141,6 +146,9 @@ class RiotFormatter():
 
 
     def __init__(self, my_api):
+        '''
+        (RiotFormatter, RiotAPI) -> NoneType
+        '''
         self.runes_info = my_api.get_static_data_runes()
 
 
@@ -149,14 +157,32 @@ class RiotFormatter():
         (RiotFormatter, str)
         Represents a clean str representation of the current runepage
         '''
+        runes = dict()
+        # If we don't have an empty runepage
+        if(runepage is not None):
+            for rune in runepage['slots']:
+                # Totaling the number of runes
+                if(rune['runeId'] not in runes):
+                    runes[rune['runeId']] = 1
+                else:
+                    runes[rune['runeId']] += 1
 
-    def get_api(self):
+        result = dict()
+        # Getting the name of the runes
+        for runeID, runeOccurence in runes.items():
+            (result[self.runes_info['data']
+                    [str(runeID)]['name']]) = runeOccurence
+        return result
+
+
+    def format_game(self, game):
         '''
-        (RiotFormatter) -> RiotAPI
+        (RIotFormatter, str) -> Str
+        Returns a str representation of a game
         '''
 
 if __name__ == '__main__':
     my_api = RiotAPI('b4a70e9e-748e-44f7-85ea-bef1b5ea62ca')
     my_formatter = RiotFormatter(my_api)
-    #print(my_api.get_summoner_by_name('TheCheeseyGamer'))
+    print(my_api.get_summoner_by_name('TheCheeseyGamer'))
     current_runepage = my_formatter.format_runepage(my_api.get_current_runes(21222532))

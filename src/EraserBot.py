@@ -17,10 +17,8 @@
 # LIABILITY,WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISIN
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
-
 import socket, time, urllib.request
-from random import randint
-import RiotAPI, RiotConstants
+import RiotAPI, RiotConstants, random
 
 # Connection Constants
 HOST = "irc.twitch.tv"
@@ -43,6 +41,7 @@ EMOTES = set()
 EXTRA_VIEWER_COMMANDS = dict()
 EXTRA_MOD_COMMANDS = dict()
 EXTRA_OWNER_COMMANDS = dict()
+AUTO_MESSAGES = dict
 # The Command Followed By It's Clearance
 SYSTEM_COMMANDS = {'mods': {'save', 'r9k', 'r9koff', 'addViewerCommand',
                                'deleteViewerCommand'},
@@ -50,14 +49,16 @@ SYSTEM_COMMANDS = {'mods': {'save', 'r9k', 'r9koff', 'addViewerCommand',
                                 'deleteModCommand', 'addOwnerCommand',
                                 'deleteOwnerCommand', 'changeSetting'}}
 
+# AUTO_MESSAGE_DELAY is in seconds
 SETTINGS = {'MAXIMUM_NON_ASCII_CHARACTERS' : 4,
-                'ANTI_SPAM_LENGTH' : 30, 'MAX_EMOTE_OCCURENCE' : 5}
+                'ANTI_SPAM_LENGTH' : 30, 'MAX_EMOTE_OCCURENCE' : 5,
+                'AUTO_MESSAGE' : False, 'AUTO_MESSAGE_DELAY' : 300}
 
 # Riot API Constants
 API = RiotAPI.RiotAPI(RIOT_API_KEY)
 FORMATTER = RiotAPI.RiotFormatter(API)
 SUMMONER_NAME = 'summonerName'
-SUMMONER_ID = #summonerID
+SUMMONER_ID = API.get_summoner_by_name(SUMMONER_NAME)
 
 print('Connecting')
 t = socket.socket()
@@ -81,7 +82,7 @@ def execute_command(command, name, line):
     # You can add indiviudal effects here, but unless it requires something
     # not executable by the send_message(message) do not add
     if(command == 'runes'):
-        pass
+        t.send(FORMATTER.format_runepage(API.get_current_runes(SUMMONER_ID)))
     # Extra Viewer Commands
     elif(command in EXTRA_VIEWER_COMMANDS.keys()):
         send_message(EXTRA_VIEWER_COMMANDS[command])
@@ -96,8 +97,11 @@ def execute_command(command, name, line):
             elif(command == 'addViewerCommand'):
                 add_command(EXTRA_VIEWER_COMMANDS, line[0], line)
             elif(command == 'deleteViewerCommand'):
-                del EXTRA_VIEWER_COMMANDS[line[0]]
-                send_message('Command ' + line[0] + ' has been deleted.')
+                delete_command(EXTRA_VIEWER_COMMANDS, line[0])
+            elif(command == 'addAutoMessage'):
+                add_command(AUTO_MESSAGES, line[0], line)
+            elif(command == 'deleteAutoMessage'):
+                delete_command(AUTO_MESSAGES, line[0])
         # Else just a spare mod command
         elif(command in EXTRA_MOD_COMMANDS.keys()):
             send_message(EXTRA_MOD_COMMANDS[command])
@@ -111,8 +115,7 @@ def execute_command(command, name, line):
                     add_command(EXTRA_MOD_COMMANDS, line[0], line)
                 # Deleteing Mod Commands
                 elif(command == 'deleteModCommand'):
-                    del EXTRA_MOD_COMMANDS[line[0]]
-                    send_message('Command ' + line[0] + ' has been deleted.')
+                    delete_command(EXTRA_MOD_COMMANDS, line[0])
                 # Deleteing Mods
                 elif(command == 'addMods'):
                     for mod in line:
@@ -125,8 +128,7 @@ def execute_command(command, name, line):
                 elif(command == 'addOwnerCommand'):
                     add_command(EXTRA_OWNER_COMMANDS, line[0], line)
                 elif(command == 'deleteOwnerCommand'):
-                    del EXTRA_OWNER_COMMANDS[line[0]]
-                    send_message('Command ' + line[0] + ' has been deleted.')
+                    delete_command(EXTRA_OWNER_COMMANDS, line[0])
                 elif(command == 'changeSetting'):
                     # If our wanted setting is valid
                     if(line[0] in SETTING.keys()):
@@ -139,6 +141,7 @@ def execute_command(command, name, line):
             elif(command in EXTRA_OWNER_COMMANDS.keys()):
                 send_message(EXTRA_OWNER_COMMANDS[command])
 
+
 def add_command(target, command_name, line):
     '''
     (Dict(Str, Str), Str, [Str]) -> NoneType
@@ -149,6 +152,19 @@ def add_command(target, command_name, line):
         send_message('Command ' + line[0] + ' has been added.')
     else:
         send_message('Invalid Entry')
+
+
+def delete_command(target, command_name):
+    '''
+    (Dict, Str) -> NoneType
+    Deletes the command with the name at the targeted dictionary.
+    '''
+    if(command_name in target):
+        del target[command_name]
+        send_message('Command ' + command_name +
+                     ' has been deleted.')
+    else:
+        send_message('Command ' + command_name + ' does not exist.')
 
 
 def send_message(message):
@@ -243,7 +259,30 @@ def check_spam(message, username):
     return False
 
 
+def auto_message():
+    '''
+    () -> ()
+    Sends periodic random messages through twitch chat
+    '''
+    new_key = random.choice(AUTO_MESSAGES)
+    current_key = ''
+    while True:
+        # Making sure the next message is not the same as our current
+        # Maybe a global cosntantw ould work better here hmm...
+        while(current_key != new_key and len(AUTO_MESSAGES > 1)):
+            new_key = random.choice(AUTO_MESSAGES.keys())
+        current_key = new_key
+
+        send_message(AUTO_MESSAGE[current_key])
+        # Sleep the thread
+        time.sleep(SETTINGS['AUTO_MESSAGE_DELAY'])
+
+
 def load_data():
+    '''
+    () -> ()
+    Loads all the apparoate data from disk onto the bot
+    '''
     # Loading mods and banned words
     load_set(BANNED_WORDS, 'banned_words.txt')
     load_set(MODS, 'mods.txt')
@@ -258,6 +297,7 @@ def load_data():
     load_dict(EXTRA_VIEWER_COMMANDS, 'extra_viewer_commands.txt')
     load_dict(EXTRA_MOD_COMMANDS, 'extra_mod_commands.txt')
     load_dict(EXTRA_OWNER_COMMANDS, 'extra_owner_commands.txt')
+    load_dict(AUTO_MESSAGES, 'auto_messages.txt')
     load_dict(SETTINGS, 'settings.txt')
     for key, value in SETTINGS.items():
         SETTINGS[key] = int(value)
@@ -272,6 +312,7 @@ def save_data():
     save_dict(EXTRA_VIEWER_COMMANDS, 'extra_viewer_commands.txt')
     save_dict(EXTRA_MOD_COMMANDS, 'extra_mod_commands.txt')
     save_dict(EXTRA_OWNER_COMMANDS, 'extra_owner_commands.txt')
+    save_dict(AUTO_MESSAGES, 'auto_messages.txt')
     save_dict(SETTINGS, 'settings.txt')
 
 
@@ -362,6 +403,12 @@ def list_to_str(message):
 
 # Main Loop
 load_data()
+
+if(SETTINGS['AUTO_MESSAGE']):
+    try:
+        thread.start_new_thread(auto_message, ())
+    except:
+        print('Something went wrong')
 
 while True:
     readbuffer = readbuffer + t.recv(1024).decode("UTF-8")
