@@ -35,13 +35,14 @@ RIOT_API_KEY = 'riotAPIKey'
 
 # Local Constants
 KEY_PHRASE = '!'
-MODS = {OWNER}
+MODS = {OWNER, 'thehiddenmage2'}
 BANNED_WORDS = set()
 EMOTES = set()
 EXTRA_VIEWER_COMMANDS = dict()
 EXTRA_MOD_COMMANDS = dict()
 EXTRA_OWNER_COMMANDS = dict()
-AUTO_MESSAGES = dict
+LINK_WHITELIST = dict()
+AUTO_MESSAGES = dict()
 # The Command Followed By It's Clearance
 SYSTEM_COMMANDS = {'mods': {'save', 'r9k', 'r9koff', 'addViewerCommand',
                                'deleteViewerCommand'},
@@ -82,7 +83,10 @@ def execute_command(command, name, line):
     # You can add indiviudal effects here, but unless it requires something
     # not executable by the send_message(message) do not add
     if(command == 'runes'):
-        t.send(FORMATTER.format_runepage(API.get_current_runes(SUMMONER_ID)))
+        if(SUMMONER_NAME != 'summonerName'):
+            send_message(SUMMONER_NAME + ' is using : ' +
+                         str(FORMATTER.format_runepage(
+                             API.get_current_runes(SUMMONER_ID))))
     # Extra Viewer Commands
     elif(command in EXTRA_VIEWER_COMMANDS.keys()):
         send_message(EXTRA_VIEWER_COMMANDS[command])
@@ -129,6 +133,11 @@ def execute_command(command, name, line):
                     add_command(EXTRA_OWNER_COMMANDS, line[0], line)
                 elif(command == 'deleteOwnerCommand'):
                     delete_command(EXTRA_OWNER_COMMANDS, line[0])
+                # Adding owner commands
+                elif(command == 'addLink'):
+                    add_command(LINK_WHITELIST, line[0], line)
+                elif(command == 'deleteLink'):
+                    delete_command(LINK_WHITELIST, line[0])
                 elif(command == 'changeSetting'):
                     # If our wanted setting is valid
                     if(line[0] in SETTING.keys()):
@@ -211,7 +220,7 @@ def emote_filter(message):
     Checks if the current str does not obey the maxmium
     number of emotes allowed.
     '''
-        # Something going wrong
+    # Something going wrong
     if(isinstance(message, list)):
         emotes_occurence = 0
         for word in message:
@@ -222,6 +231,17 @@ def emote_filter(message):
                 return True
     return False
 
+
+def link_filter(message):
+    '''
+    (Str) -> bool
+    Checks if the current str contains a non whitelisted link
+    '''
+    return False
+    for word in message:
+        if(word):
+            return True
+    return False
 
 def check_spam(message, username):
     '''
@@ -244,7 +264,7 @@ def check_spam(message, username):
                          " words please : "  + username)
             return True
 
-    # Then checknig the ASCII filter
+    # Then checking the ASCII filter
     if(False):
         if(ASCII_Filter(message) == True):
             time_out(username, 10)
@@ -256,6 +276,11 @@ def check_spam(message, username):
         time_out(username, 10)
         send_message("Emote spam detected : " + username)
         return True
+
+    # Link Filter
+    if(link_filter(message) == True):
+        time_out(username, 10)
+        send_message("Linked is not from a whitelisted source : " + username)
     return False
 
 
@@ -298,6 +323,7 @@ def load_data():
     load_dict(EXTRA_MOD_COMMANDS, 'extra_mod_commands.txt')
     load_dict(EXTRA_OWNER_COMMANDS, 'extra_owner_commands.txt')
     load_dict(AUTO_MESSAGES, 'auto_messages.txt')
+    load_dict(LINK_WHITELIST, 'link_whitelist.txt')
     load_dict(SETTINGS, 'settings.txt')
     for key, value in SETTINGS.items():
         SETTINGS[key] = int(value)
@@ -313,6 +339,7 @@ def save_data():
     save_dict(EXTRA_MOD_COMMANDS, 'extra_mod_commands.txt')
     save_dict(EXTRA_OWNER_COMMANDS, 'extra_owner_commands.txt')
     save_dict(AUTO_MESSAGES, 'auto_messages.txt')
+    save_dict(LINK_WHITELIST, 'link_whitelist.txt')
     save_dict(SETTINGS, 'settings.txt')
 
 

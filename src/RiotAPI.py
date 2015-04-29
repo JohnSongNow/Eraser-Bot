@@ -122,9 +122,10 @@ class RiotAPI():
         current runepage.
         '''
         runepages = self.get_runepages(ID)
-        for runepage in runepages[str(ID)]['pages']:
-            if(runepage['current'] == True):
-                return runepage
+        if(runepages != None):
+            for runepage in runepages[str(ID)]['pages']:
+                if(runepage['current'] == True):
+                    return runepage
         return None
 
 
@@ -186,3 +187,4 @@ if __name__ == '__main__':
     my_formatter = RiotFormatter(my_api)
     print(my_api.get_summoner_by_name('TheCheeseyGamer'))
     current_runepage = my_formatter.format_runepage(my_api.get_current_runes(21222532))
+    print(current_runepage)
