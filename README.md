@@ -1,20 +1,21 @@
 # EraserBot
-An open-source IRC bot designed for Twitch.tv made in Python. To have the bot in your channel simply fill out the required forms on the bots field.
+Eraserbot is an IRC bot written in Python (**3.3+**) designed for to moderate Twitch.tv channels. EraserBot is a simple and customizable bot editable both manually using the options file or using the Twitch.tv chat when the bot is running. To run the bot EraserBot should be ran in an Python IDE. To have the bot in your channel simply fill out the required forms on the bots field.
 
 If you have any question feel free to leave me a note, I will do my best to address as many issues as I can but no promises.
 
 # Setup
+To setup your bot you need the following. Running the bot is fairly simple, simply run the script using your Python IDE of choice and fill out the required forms. Don't forget to mod EraserBot as well.
+
 - Python 3.3+
-- EraserBot 1.0
-- LeagueAPI 1.0
-- requests plguin (if you're using the LeagueAPI)
+- EraserBot
+- A Python IDE (Not needed if you are running the script directly)
 
 # Features
 Eraser bot features anti, spam filters, customiable dilagoue and LeagueAPI intergration.
 
 - Anti Spam Filter
 - Easy to customize mod, viewer, and owner bot phrases
-- LOL account intergration
+- Social Media Intergration with FB and Twitter
 
 # Bot Info
 Below is a list of all the required info for the bot to function. Keep in mind that if you do not understand a field simply conduct a google serach.
