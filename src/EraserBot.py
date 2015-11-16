@@ -18,7 +18,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 import socket, time, urllib.request
-import RiotAPI, RiotConstants, random
+import random
 
 # Connection Constants
 HOST = "irc.twitch.tv"
@@ -31,7 +31,6 @@ CHANNEL = "#channelName"
 PASSWORD = "twitchBotOuathID"
 readbuffer = ""
 GLOBAL_EMOTES_URL = 'https://twitchemotes.com/filters/global'
-RIOT_API_KEY = 'riotAPIKey'
 
 # Local Constants
 KEY_PHRASE = '!'
@@ -54,12 +53,6 @@ SYSTEM_COMMANDS = {'mods': {'save', 'r9k', 'r9koff', 'addViewerCommand',
 SETTINGS = {'MAXIMUM_NON_ASCII_CHARACTERS' : 4,
                 'ANTI_SPAM_LENGTH' : 30, 'MAX_EMOTE_OCCURENCE' : 5,
                 'AUTO_MESSAGE' : False, 'AUTO_MESSAGE_DELAY' : 300}
-
-# Riot API Constants
-API = RiotAPI.RiotAPI(RIOT_API_KEY)
-FORMATTER = RiotAPI.RiotFormatter(API)
-SUMMONER_NAME = 'summonerName'
-SUMMONER_ID = API.get_summoner_by_name(SUMMONER_NAME)
 
 # Testing to changes. Nothing special. Procceed as normal.
 
@@ -84,13 +77,9 @@ def execute_command(command, name, line):
     print(name in MODS)
     # You can add indiviudal effects here, but unless it requires something
     # not executable by the send_message(message) do not add
-    if(command == 'runes'):
-        if(SUMMONER_NAME != 'summonerName'):
-            send_message(SUMMONER_NAME + ' is using : ' +
-                         str(FORMATTER.format_runepage(
-                             API.get_current_runes(SUMMONER_ID))))
+
     # Extra Viewer Commands
-    elif(command in EXTRA_VIEWER_COMMANDS.keys()):
+    if(command in EXTRA_VIEWER_COMMANDS.keys()):
         send_message(EXTRA_VIEWER_COMMANDS[command])
 
     # If our command is mod-only
@@ -311,38 +300,38 @@ def load_data():
     Loads all the apparoate data from disk onto the bot
     '''
     # Loading mods and banned words
-    load_set(BANNED_WORDS, 'banned_words.txt')
+    load_set(BANNED_WORDS, 'data/banned_words.txt')
     load_set(MODS, 'mods.txt')
 
     # Loading Emotes
     temp_emotes = []
-    load_list(temp_emotes, 'global_emotes.txt')
+    load_list(temp_emotes, 'data/global_emotes.txt')
     for emote in temp_emotes:
         EMOTES.add(emote[:len(emote) - 1])
 
     # Loading all the dicts
-    load_dict(EXTRA_VIEWER_COMMANDS, 'extra_viewer_commands.txt')
-    load_dict(EXTRA_MOD_COMMANDS, 'extra_mod_commands.txt')
-    load_dict(EXTRA_OWNER_COMMANDS, 'extra_owner_commands.txt')
-    load_dict(AUTO_MESSAGES, 'auto_messages.txt')
-    load_dict(LINK_WHITELIST, 'link_whitelist.txt')
-    load_dict(SETTINGS, 'settings.txt')
+    load_dict(EXTRA_VIEWER_COMMANDS, 'data/extra_viewer_commands.txt')
+    load_dict(EXTRA_MOD_COMMANDS, 'data/extra_mod_commands.txt')
+    load_dict(EXTRA_OWNER_COMMANDS, 'data/extra_owner_commands.txt')
+    load_dict(AUTO_MESSAGES, 'data/auto_messages.txt')
+    load_dict(LINK_WHITELIST, 'data/link_whitelist.txt')
+    load_dict(SETTINGS, 'data/settings.txt')
     for key, value in SETTINGS.items():
         SETTINGS[key] = int(value)
 
 
 def save_data():
     # Saving mods and banned words
-    save_set(BANNED_WORDS, 'banned_words.txt')
-    save_set(MODS, 'mods.txt')
+    save_set(BANNED_WORDS, 'data/banned_words.txt')
+    save_set(MODS, 'data/mods.txt')
 
     # Loading all the dicts
-    save_dict(EXTRA_VIEWER_COMMANDS, 'extra_viewer_commands.txt')
-    save_dict(EXTRA_MOD_COMMANDS, 'extra_mod_commands.txt')
-    save_dict(EXTRA_OWNER_COMMANDS, 'extra_owner_commands.txt')
-    save_dict(AUTO_MESSAGES, 'auto_messages.txt')
-    save_dict(LINK_WHITELIST, 'link_whitelist.txt')
-    save_dict(SETTINGS, 'settings.txt')
+    save_dict(EXTRA_VIEWER_COMMANDS, 'data/extra_viewer_commands.txt')
+    save_dict(EXTRA_MOD_COMMANDS, 'data/extra_mod_commands.txt')
+    save_dict(EXTRA_OWNER_COMMANDS, 'data/extra_owner_commands.txt')
+    save_dict(AUTO_MESSAGES, 'data/auto_messages.txt')
+    save_dict(LINK_WHITELIST, 'data/link_whitelist.txt')
+    save_dict(SETTINGS, 'data/settings.txt')
 
 
 def load_dict(target, file_name):
