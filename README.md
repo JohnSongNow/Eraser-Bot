@@ -29,14 +29,14 @@ By default the key phrase is '!', you can change it but it is not recommended.
 To call a command simply put the keyphrase, the command name then the params. Note the last param
 will take into account every word until the end is reached.
 
-Example 1
+#### Example 1
 ```
 !addViewerCommand [commandToken] [Phrase]
 
 !addViewerCommand facebook Here is a link to facebook! https://facebook.com
 ```
 
-Second example 2
+#### Example 2
 ```
 !changeSetting [settingName] [settingValue]
 
@@ -45,16 +45,18 @@ Second example 2
 Notice how all values past the param are considered to be part of 
 ```
 
+### Default Commands
+
 - Mod
-  - addViewerCommand [commandToken] [Phrase]
-  - deleteViewerCommand [commandToken]
+  - !addViewerCommand [commandToken] [Phrase]
+  - !deleteViewerCommand [commandToken]
 - Owner
-- save : Saves the currnet commands to local text files  
-- reload : Reloads all current commands from local text files  
-- add|Mod/Owner|Command [commandToken] [Phrase] : Adds a mod/owner phrase with a keyword
-- delete|Mod/Owner|Command [commandToken] : Deletes a mod/owner phrase with a keyword
-- changeSetting [settingName] [newValue] : Changes the given setting to a new value
-- addMods [modNames] : Adds a mod to the bot-mod list
-- deleteMods [modNames] : Deletes a mod from the bot-mod list 
+  - !save : Saves the currnet commands to local text files  
+  - !reload : Reloads all current commands from local text files  
+  - !add|Mod/Owner|Command [commandToken] [Phrase] : Adds a mod/owner phrase with a keyword
+  - !delete|Mod/Owner|Command [commandToken] : Deletes a mod/owner phrase with a keyword
+  - !changeSetting [settingName] [newValue] : Changes the given setting to a new value
+  - !addMods [modNames] : Adds a mod to the bot-mod list
+  - !deleteMods [modNames] : Deletes a mod from the bot-mod list 
 
 For any questions please visit [Eraser-Bot](johnsong.science/projects/eraser-bot)
