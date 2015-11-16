@@ -1,6 +1,6 @@
 # Eraser-Bot
 Eraser-Bot is an IRC bot written in specifically designed to moderate Twitch.tv channels. It's a simple and customizable bot 
-designed to ensure a smooth chat experience. Eraser bot features anti-spam and profanity filters, customizable commands, and is easy to use.
+designed to ensure a smooth chat experience. Eraser bot features anti-spam and profanity filters, customizable commands, and auto-messages.
 
 # Setup
 Running the bot is fairly simple, fill out the required forms and then run the script using a Python IDE or through a cmd prompt/shell  Don't forget to mod Eraser-Bot as well.
