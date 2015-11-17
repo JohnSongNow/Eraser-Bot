@@ -66,9 +66,22 @@ Notice how all values past the param are considered to be part of
   - !changeSetting [settingName] [newValue] : Changes the given setting to a new value
   - !addMods [modNames] : Adds a mod to the bot-mod list
   - !deleteMods [modNames] : Deletes a mod from the bot-mod list 
+  - !addLink [linkName] : A link to be added to the whitelist
+  - !deleteLink [linkName] A link to be deleted to the whitelist
+
+# Options
+When manually editing the data files locally, the files that store the local data are (**currently**) using dictionary format, with a key and value. (May get swapped to (**JSON**) at a later date)
+
+#### Example
+```
+Kappa:Grey Face(No Space)
+Hello:Hello to you are well
+```
 
 # TODO
+- Change words and other data to JSON format (Maybe)
 - Optimize the code more efficently
+- Get a bigger dictionary of swear words...
 - Twitter and FB intergration (maybe)
 
 For any questions please visit [Eraser-Bot](johnsong.science/projects/eraser-bot)
