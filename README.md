@@ -9,6 +9,14 @@ Running the bot is fairly simple, fill out the required forms and then run the s
 - A modded Twitch.tv account for Eraser-Bot to use
 - Python IDE(Not needed but recommended if using shell/cmd prompt)
 
+### Running
+To run Eraser-Bot simply open a cmd prompt, cd to the directory and type.
+You can just hold shift on the folder thta it contains in, right click and open a cmd prompt easily.
+```
+python eraser-bot.py
+```
+Alternativly you can also run Eraser-Bot through a Python IDE.
+
 # Bot Info
 Fill out the info below with the required info to run Eraser-Bot. I recommend making a dedicated Twitch.tv account for your bot.
 
