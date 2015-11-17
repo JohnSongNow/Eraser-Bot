@@ -1,7 +1,7 @@
 # Copyright (c) 2015 Jin (John) Song (rh [at] johnsong.science)
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the “Software”), to deal
+# of this software and associated documentation files (the "Software�"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
@@ -10,7 +10,7 @@
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
 
-# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -23,12 +23,12 @@ import random
 # Connection Constants
 HOST = "irc.twitch.tv"
 PORT = 6667
-OWNER = 'ownerNAME'
-NICK = "botName"
-IDENT = "botName"
-REALNAME = "botName"
-CHANNEL = "#channelName"
-PASSWORD = "twitchBotOuathID"
+OWNER = 'thehiddenmage2'
+NICK = "EraserBot"
+IDENT = "EraserBot"
+REALNAME = "EraserBot"
+CHANNEL = "#thehiddenmage2"
+PASSWORD = "oauth:i18i8vy9xag2f77fixikhwggyqntud"
 readbuffer = ""
 GLOBAL_EMOTES_URL = 'https://twitchemotes.com/filters/global'
 
@@ -74,7 +74,6 @@ def execute_command(command, name, line):
     Executes a series of commands based on the
     command, name and line.
     '''
-    print(name in MODS)
     # You can add indiviudal effects here, but unless it requires something
     # not executable by the send_message(message) do not add
 
@@ -86,10 +85,7 @@ def execute_command(command, name, line):
     elif(name in MODS):
         # Activiating system commands for mods
         if(command in SYSTEM_COMMANDS['mods']):
-            if(command == 'save'):
-                save_data()
-                send_message('Data has been saved')
-            elif(command == 'addViewerCommand'):
+            if(command == 'addViewerCommand'):
                 add_command(EXTRA_VIEWER_COMMANDS, line[0], line)
             elif(command == 'deleteViewerCommand'):
                 delete_command(EXTRA_VIEWER_COMMANDS, line[0])
@@ -137,6 +133,12 @@ def execute_command(command, name, line):
                             SETTINGS[line[0]] = line[1]
                         except Exception:
                             send_message('Invalid Entry')
+                elif(command == 'save'):
+                    save_data()
+                    send_message('Data has been saved')
+                elif(command == 'load'):
+                    load_data()
+                    send_message('Data has been reloaded')
             # Activating spare owner commands
             elif(command in EXTRA_OWNER_COMMANDS.keys()):
                 send_message(EXTRA_OWNER_COMMANDS[command])
@@ -301,7 +303,7 @@ def load_data():
     '''
     # Loading mods and banned words
     load_set(BANNED_WORDS, 'data/banned_words.txt')
-    load_set(MODS, 'mods.txt')
+    load_set(MODS, 'data/mods.txt')
 
     # Loading Emotes
     temp_emotes = []
@@ -419,14 +421,16 @@ def list_to_str(message):
         return result_message
 
 
-# Main Loop
+# Loads the data from local text files
 load_data()
 
+# Main Loop
 if(SETTINGS['AUTO_MESSAGE']):
     try:
+        # Used for auto messaging
         thread.start_new_thread(auto_message, ())
     except:
-        print('Something went wrong')
+        print('Something went wrong with auto messaging')
 
 while True:
     readbuffer = readbuffer + t.recv(1024).decode("UTF-8")
@@ -448,10 +452,10 @@ while True:
 
             # Checking Spam
             if(check_spam(line[3:], name) == False):
-                # Checking if we have a command
+                # Breaking up the line to check for commands
                 if(len(line) > 3):
                     command = line[3].strip(':').strip()
-                    # Command executor
+                    # Checking if we have a command
                     if(command[0] != ''):
                         if(command[0] == KEY_PHRASE):
                             execute_command(command[1:], name, line[4:])
