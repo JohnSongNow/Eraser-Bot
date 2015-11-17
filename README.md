@@ -67,4 +67,8 @@ Notice how all values past the param are considered to be part of
   - !addMods [modNames] : Adds a mod to the bot-mod list
   - !deleteMods [modNames] : Deletes a mod from the bot-mod list 
 
+# TODO
+- Optimize the code more efficently
+- Twitter and FB intergration (maybe)
+
 For any questions please visit [Eraser-Bot](johnsong.science/projects/eraser-bot)
