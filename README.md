@@ -1,21 +1,18 @@
 # Eraser-Bot
 Eraser-Bot is an IRC bot written in specifically designed to moderate Twitch.tv channels. It's a simple and customizable bot 
-designed to ensure a smooth chat experience. Eraser bot features anti-spam and profanity filters, customizable commands, and auto-messages.
+designed to ensure a smooth chat experience. Eraser bot features anti-spam and profanity filters, customizable commands, and auto-messages. Eraser-Bot is an open source libary that can be modified and imported or by running the dedicated GUI completely.
 
 # Setup
-Running the bot is fairly simple, fill out the required forms and then run the script using a Python IDE or through a cmd prompt/shell  Don't forget to mod Eraser-Bot as well.
+Running the bot is fairly simple, fill out the required forms and then run the script using a Python IDE or by running the dedicated Python GUI for it  Don't forget to mod the account running Eraser-Bot as well.
 
 - Python (**3.3+**) 
 - A modded Twitch.tv account for Eraser-Bot to use
-- Python IDE(Not needed but recommended if using shell/cmd prompt)
+- Python IDE(Not needed if you're running the dedicated GUI)
 
 ### Running
-To run Eraser-Bot simply open a cmd prompt, cd to the directory and type.
-You can just hold shift on the folder thta it contains in, right click and open a cmd prompt easily.
-```
-python eraser-bot.py
-```
-Alternativly you can also run Eraser-Bot through a Python IDE.
+Running Eraser-Bot can be done ither by using the dedicated GUI (recommended for begineers), or by running the base file (not recommended). 
+
+Alternativly you can modify and import the API of Eraser-Bot.
 
 # Bot Info
 Fill out the info below with the required info to run Eraser-Bot. I recommend making a dedicated Twitch.tv account for your bot.
