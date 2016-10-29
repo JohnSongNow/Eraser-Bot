@@ -1,7 +1,7 @@
 # Copyright (c) 2015 Jin (John) Song (rh [at] johnsong.science)
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Softwareî"), to deal
+# of this software and associated documentation files (the "Software‚Äù"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
@@ -28,7 +28,7 @@ NICK = "EraserBot"
 IDENT = "EraserBot"
 REALNAME = "EraserBot"
 CHANNEL = "#thehiddenmage2"
-PASSWORD = "oauth:i18i8vy9xag2f77fixikhwggyqntud"
+PASSWORD = "oauth:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 readbuffer = ""
 GLOBAL_EMOTES_URL = 'https://twitchemotes.com/filters/global'
 
